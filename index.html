@@ -29,7 +29,8 @@
   html,body{margin:0;padding:0}
   body{
     font-family:"Rubik","Segoe UI","Heebo",Arial,sans-serif;
-    background:linear-gradient(180deg,#F3EAF0 0,var(--bg) 380px) no-repeat var(--bg); color:var(--ink);
+    background:var(--bg); color:var(--ink);
+    border-top:3px solid var(--burgundy);
     font-size:17px; line-height:1.65;
     -webkit-font-smoothing:antialiased;
   }
@@ -68,10 +69,10 @@
   .intro{padding:26px 0 4px}
   .intro h1{font-size:29px;margin:0 0 6px;letter-spacing:-.01em}
   .intro-sub{margin:0;color:var(--muted);max-width:64ch;font-size:16px}
-  .stats{display:flex;gap:30px;flex-wrap:wrap;margin-top:16px}
-  .stat{display:flex;flex-direction:column;line-height:1.15}
-  .stat .n{font-size:23px;font-weight:800;color:var(--burgundy);font-variant-numeric:tabular-nums}
-  .stat .l{font-size:13.5px;color:var(--muted);margin-top:1px}
+  .stats{display:flex;gap:26px;flex-wrap:wrap;margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}
+  .stat{display:flex;flex-direction:column;line-height:1.1}
+  .stat .n{font-size:20px;font-weight:800;color:var(--burgundy);font-variant-numeric:tabular-nums}
+  .stat .l{font-size:12.5px;color:var(--muted);margin-top:2px}
   .toolbar{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin:20px 0 6px}
   .toolbar .scope-tabs{margin:0}
   .toolbar .filter-search{margin:0;flex:0 1 380px;min-width:220px}
@@ -127,77 +128,54 @@
   /* ---------- cards ----------
      כיוון עיצוב (Adi, 22.7): אייקונים גדולים ובולטים, פחות מסגרת, יותר אוויר.
      אין קו מסגרת — הפרדה ברווח ובצל רך; האייקון הוא העוגן הוויזואלי. */
-  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:22px;padding-bottom:44px}
-  /* כרטיס אופקי: פאנל תמונה בשליש השמאלי, טקסט בשני השלישים הימניים (Adi, 22.7) */
+  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;padding-bottom:44px}
+  /* רדיזיין 17.9: כרטיס נקי וטיפוגרפי, בלי פאנל גרדיאנט; פס-סטטוס דק בצד */
   .card{
-    position:relative;overflow:hidden;
-    background:var(--card);border:none;border-radius:18px;
-    box-shadow:0 1px 2px rgba(16,24,40,.04),0 6px 20px rgba(16,24,40,.06);
-    text-align:start;font:inherit;color:inherit;
-    cursor:pointer;display:flex;flex-direction:row;align-items:stretch;
-    transition:box-shadow .2s,transform .2s;
+    display:block;width:100%;text-align:start;font:inherit;color:inherit;cursor:pointer;
+    background:var(--card);border:1px solid var(--line);border-inline-start:4px solid var(--line);
+    border-radius:14px;transition:border-color .15s,box-shadow .15s,transform .15s;
   }
-  .card::before{
-    content:"";position:absolute;inset-block-start:0;inset-inline:0;height:3px;z-index:2;
-    background:linear-gradient(90deg,var(--burgundy),var(--blue));
-    transform:scaleX(0);transform-origin:inline-end;transition:transform .3s ease;
-  }
-  .card:hover::before{transform:scaleX(1)}
-  .card:hover{box-shadow:0 6px 16px rgba(16,24,40,.07),0 22px 44px rgba(133,13,74,.11);transform:translateY(-3px)}
+  .card.is-open,.card.is-soon{border-inline-start-color:var(--ok-fg)}
+  .card.is-valid{border-inline-start-color:var(--blue)}
+  .card.is-archived{border-inline-start-color:#C8CDD4}
+  .card:hover{border-color:#CBD1D8;border-inline-start-color:var(--burgundy);box-shadow:0 8px 24px rgba(16,24,40,.09);transform:translateY(-2px)}
   .card:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
 
-  .card-body{flex:1 1 auto;min-width:0;padding:22px 24px;display:flex;flex-direction:column;gap:11px}
-  .card-top{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-  .num{font-size:13.5px;font-weight:700;color:var(--burgundy);letter-spacing:.02em}
-  .eyebrow{font-size:12.5px;font-weight:700;letter-spacing:.02em;color:var(--blue);margin-bottom:2px}
-  .card h3{font-size:20px;margin:0;line-height:1.28;text-wrap:balance}
+  .card-body{padding:17px 19px;display:flex;flex-direction:column;gap:9px}
+  .card-top{display:flex;align-items:flex-start;gap:12px}
+  .card-heads{flex:1 1 auto;min-width:0}
+  .card-meta{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:3px}
+  .num{font-size:12px;font-weight:700;color:var(--burgundy);letter-spacing:.02em}
+  .eyebrow{font-size:12px;font-weight:700;letter-spacing:.02em;color:var(--blue)}
+  .card-meta .dot{color:#C8CDD4;font-size:12px}
+  .card h3{font-size:18px;margin:0;line-height:1.3;font-weight:700;text-wrap:balance}
   .card-desc{
-    font-size:14.5px;color:var(--muted);margin:3px 0 0;
-    display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;
+    font-size:13.5px;color:var(--muted);margin:0;line-height:1.5;
+    display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
   }
 
-  /* פאנל התמונה — שליש שמאלי. כרגע כיסוי מותג + אייקון (מקום לתמונה אמיתית של עדי). */
-  .card-media{
-    flex:0 0 33%;position:relative;overflow:hidden;
-    background:linear-gradient(150deg,#8f1a56 0%,#5a2f6e 52%,#0d5081 100%);
-    display:grid;place-items:center;
-  }
-  .card-media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
-  .card-media .cover-ic{color:rgba(255,255,255,.92);display:grid;place-items:center}
-  .card-media .cover-ic svg{width:52px;height:52px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
-  .card:hover .card-media .cover-ic{transform:scale(1.05);transition:transform .25s}
-  .scope-tag{
-    position:absolute;inset-block-start:10px;inset-inline-start:10px;z-index:1;
-    font-size:11.5px;font-weight:700;color:#fff;background:rgba(15,20,25,.34);
-    padding:3px 9px;border-radius:999px;backdrop-filter:blur(2px);
-  }
-  /* אייקון תחום — קו נקי ומונוכרום, לא אימוג'י */
-  .card-main{display:flex;gap:12px;align-items:flex-start}
-  .card-text{min-width:0}
+  /* אייקון תחום — צ'יפ מלא עדין, מונוכרום, לא אימוג'י */
   .dom-ic{
-    flex:0 0 auto;width:58px;height:58px;border-radius:17px;
-    background:linear-gradient(140deg,rgba(133,13,74,.13),rgba(7,74,122,.16));
-    color:var(--burgundy);display:grid;place-items:center;
-    transition:background .2s,transform .2s;
+    flex:0 0 auto;width:40px;height:40px;border-radius:11px;
+    background:#F6EDF2;color:var(--burgundy);display:grid;place-items:center;
   }
-  .card:hover .dom-ic{background:linear-gradient(140deg,rgba(133,13,74,.22),rgba(7,74,122,.27));transform:scale(1.04)}
-  .dom-ic svg{width:30px;height:30px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
-  .detail-head .dom-ic{width:60px;height:60px}
-  .detail-head .dom-ic svg{width:31px;height:31px}
+  .dom-ic svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+  .detail-head .dom-ic{width:52px;height:52px;border-radius:14px}
+  .detail-head .dom-ic svg{width:27px;height:27px}
   .detail-title-row{display:flex;gap:14px;align-items:flex-start;margin:6px 0 10px}
   .chips{display:flex;gap:6px;flex-wrap:wrap}
   .chip{font-size:13px;padding:3px 10px;border-radius:999px;background:#F0F2F5;color:#3C434C;font-weight:600}
-  .badge{font-size:13px;font-weight:700;padding:4px 11px;border-radius:999px}
+  .badge{font-size:12px;font-weight:700;padding:4px 10px;border-radius:7px;white-space:nowrap;flex:0 0 auto}
   .badge.ok{background:var(--ok-bg);color:var(--ok-fg)}
   .badge.warn{background:var(--warn-bg);color:var(--warn-fg)}
   .badge.info{background:var(--info-bg);color:var(--info-fg)}
   .badge.off{background:var(--off-bg);color:var(--off-fg)}
   .badge.new{background:#F6E7EF;color:var(--burgundy)}
-  /* בלי קו מפריד — הפרדה ברווח בלבד (פחות מסגרת) */
-  .card-foot{margin-top:auto;padding-top:4px;display:flex;gap:22px;flex-wrap:wrap;font-size:14px}
-  .foot-item{display:flex;flex-direction:column;gap:1px}
-  .foot-item .k{color:var(--muted);font-size:12.5px}
-  .foot-item .v{font-weight:700;font-size:15px}
+  .card-foot{margin-top:2px;padding-top:11px;border-top:1px solid var(--line);display:flex;align-items:center;gap:20px;font-size:13.5px}
+  .foot-item{display:flex;flex-direction:column;gap:0}
+  .foot-item .k{color:var(--muted);font-size:11.5px}
+  .foot-item .v{font-weight:700;font-size:13.5px}
+  .card-cta{margin-inline-start:auto;color:var(--burgundy);font-weight:700;font-size:13px;white-space:nowrap}
 
   /* ---------- detail ---------- */
   .back{background:none;border:none;font:inherit;font-size:16px;color:var(--blue);font-weight:600;cursor:pointer;padding:22px 0 6px}
@@ -247,7 +225,7 @@
   .updates .date{font-size:14px;color:var(--muted);min-width:92px;font-weight:600}
 
   .coord{
-    background:linear-gradient(135deg,#850D4A 0%,#074A7A 100%);
+    background:var(--burgundy);
     color:#fff;border-radius:var(--radius);padding:22px;margin-bottom:26px;
   }
   .coord.coord-muted{background:#4A5058}
@@ -537,19 +515,23 @@ function cardHTML(t){
     <button class="card is-${st}" data-num="${t.num}">
       <div class="card-body">
         <div class="card-top">
-          <span class="num">מכרז ${t.num}</span>
+          <span class="dom-ic" aria-hidden="true"><svg viewBox="0 0 24 24">${ICONS[t.domain]||ICONS["אחר"]}</svg></span>
+          <div class="card-heads">
+            <div class="card-meta">
+              <span class="num">מכרז ${t.num}</span><span class="dot">·</span><span class="eyebrow">${t.domain}</span>
+              ${isUpdatedRecently(t) ? '<span class="badge new">עודכן</span>' : ''}
+            </div>
+            <h3>${shortName(t)}</h3>
+          </div>
           <span class="badge ${m.cls}">${m.txt}</span>
-          ${isUpdatedRecently(t) ? '<span class="badge new">עודכן</span>' : ''}
         </div>
-        <div class="eyebrow">${t.domain}${t.type ? " · " + t.type : ""}</div>
-        <h3>${shortName(t)}</h3>
         <p class="card-desc">${t.desc}</p>
         <div class="card-foot">
           <span class="foot-item"><span class="k">${footA.k}</span><span class="v">${footA.v}</span></span>
           <span class="foot-item"><span class="k">${footB.k}</span><span class="v">${footB.v}</span></span>
+          <span class="card-cta">לפרטים ←</span>
         </div>
       </div>
-      ${mediaFor(t)}
     </button>`;
 }
 
