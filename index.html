@@ -336,7 +336,7 @@
   <div id="view-list">
     <section class="hero">
       <!-- תמונת רקע זמנית (picsum) — עדי תחליף בתמונה אמיתית של האזור -->
-      <img class="hero-img" src="https://picsum.photos/seed/eshkol-negev/1600/700" alt="" aria-hidden="true">
+      <img class="hero-img" src="https://loremflickr.com/1600/760/desert,israel?lock=42" alt="" aria-hidden="true">
       <div class="hero-scrim"></div>
       <div class="hero-content">
         <h1>הצטרפו להסכמי מסגרת בהליך פטור ממכרז</h1>
@@ -538,8 +538,8 @@ function pcardHTML(t){
   else if (st === "valid") meta = (t.winners && t.winners.length) ? t.winners.length + " ספקים בהסכם" : "בהליך בחירה";
   else meta = "בארכיון";
   // תמונת-מקום זמנית (picsum) לפי מספר המכרז — עדי תחליף בתמונות אמיתיות (map: IMAGES)
-  const seed = encodeURIComponent(t.num.replace(/\//g,"-"));
-  const img = IMAGES[t.domain] || ("https://picsum.photos/seed/" + seed + "/600/380");
+  let lock = 7; for (const ch of t.num) lock = (lock * 31 + ch.charCodeAt(0)) % 997;
+  const img = IMAGES[t.domain] || ("https://loremflickr.com/600/380/desert,israel?lock=" + lock);
   return `
     <button class="pcard is-${st}" data-num="${t.num}">
       <div class="pcard-media">
