@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>מכרזי אשכול נגב מזרחי — אב טיפוס</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --burgundy:#850D4A;
+    --burgundy-dark:#6B0A3C;
+    --blue:#074A7A;
+    --rose:#C6827D;
+    --ink:#1F2328;
+    --muted:#5B6470;
+    --line:#E3E6EA;
+    --bg:#F7F8FA;
+    --card:#FFFFFF;
+    --ok-bg:#E7F4EC; --ok-fg:#1B6E3C;
+    --warn-bg:#FDF0DC; --warn-fg:#8A5200;
+    --info-bg:#E6EFF6; --info-fg:#074A7A;
+    --off-bg:#EEF0F2; --off-fg:#4A5058;
+    --radius:12px;
+    --shadow:0 1px 2px rgba(16,24,40,.06), 0 4px 12px rgba(16,24,40,.06);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:"Rubik","Segoe UI","Heebo",Arial,sans-serif;
+    background:var(--bg); color:var(--ink);
+    font-size:17px; line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+
+  /* ---------- skip link ----------
+     מוסתר בגזירה ולא בהזזה הצידה. הזזה כמו right:-9999px יוצרת גלילה אופקית
+     כשהדף מוטמע בתוך מסמך LTR, וזה שובר את התצוגה בנייד. */
+  .skip{
+    position:absolute;width:1px;height:1px;padding:0;overflow:hidden;
+    clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;
+    background:var(--burgundy);color:#fff;z-index:100;
+  }
+  .skip:focus{
+    position:fixed;top:0;inset-inline-start:20px;
+    width:auto;height:auto;padding:12px 20px;
+    clip:auto;clip-path:none;border-radius:0 0 8px 8px;
+  }
+
+  /* ---------- preview banner (עדין, ניתן לסגירה) ---------- */
+  .demo{position:relative;background:#F4EEF1;color:var(--burgundy);font-size:12.5px;font-weight:600;letter-spacing:.02em;text-align:center;padding:7px 40px}
+  .demo-x{position:absolute;inset-inline-end:10px;top:50%;transform:translateY(-50%);background:none;border:none;color:inherit;font-size:15px;line-height:1;cursor:pointer;opacity:.55;padding:4px 6px;border-radius:6px}
+  .demo-x:hover{opacity:1;background:rgba(133,13,74,.08)}
+  .demo-x:focus-visible{outline:2px solid var(--burgundy);outline-offset:1px;opacity:1}
+
+  /* ---------- header ---------- */
+  header.site{background:#fff;border-bottom:1px solid var(--line)}
+  .site-inner{display:flex;align-items:center;gap:18px;padding:16px 0;flex-wrap:wrap}
+  .logo{height:56px;width:auto;display:block}
+  .site-title{font-size:19px;font-weight:700;margin:0;line-height:1.25}
+  .site-sub{font-size:14px;color:var(--muted);margin:2px 0 0}
+  .site-contact{margin-inline-start:auto;font-size:14px;color:var(--muted);text-align:end}
+  .site-contact a{color:var(--blue);font-weight:600}
+
+  /* ---------- intro / hero ---------- */
+  .intro{padding:26px 0 4px}
+  .intro h1{font-size:29px;margin:0 0 6px;letter-spacing:-.01em}
+  .intro-sub{margin:0;color:var(--muted);max-width:64ch;font-size:16px}
+  .stats{display:flex;gap:30px;flex-wrap:wrap;margin-top:16px}
+  .stat{display:flex;flex-direction:column;line-height:1.15}
+  .stat .n{font-size:23px;font-weight:800;color:var(--burgundy);font-variant-numeric:tabular-nums}
+  .stat .l{font-size:13.5px;color:var(--muted);margin-top:1px}
+  .toolbar{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin:20px 0 6px}
+  .toolbar .scope-tabs{margin:0}
+  .toolbar .filter-search{margin:0;flex:0 1 380px;min-width:220px}
+
+  /* ---------- scope tabs (משותף לרשויות / של האשכול) ---------- */
+  .scope-tabs{display:inline-flex;gap:4px;background:#EDEFF2;border-radius:13px;padding:4px;margin:20px 0 2px;max-width:100%;flex-wrap:wrap}
+  .scope-tab{font:inherit;font-size:15px;font-weight:600;color:var(--muted);background:none;border:none;cursor:pointer;padding:10px 20px;border-radius:10px;transition:background .15s,color .15s}
+  .scope-tab.is-on{background:#fff;color:var(--burgundy);box-shadow:0 1px 3px rgba(16,24,40,.13)}
+  .scope-tab:hover:not(.is-on){color:var(--ink)}
+  .scope-tab:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+
+  /* ---------- filters ---------- */
+  .filters{margin:18px 0 8px}
+  .field label{display:block;font-size:14px;font-weight:600;margin-bottom:6px}
+  .field input,.field select{
+    width:100%;padding:11px 12px;font:inherit;font-size:16px;
+    border:1px solid #C8CDD4;border-radius:8px;background:#fff;color:var(--ink);
+  }
+  .field input:focus,.field select:focus{outline:3px solid rgba(7,74,122,.35);outline-offset:1px;border-color:var(--blue)}
+  .filter-search{max-width:520px;margin-bottom:20px;position:relative}
+  .search-ic{position:absolute;inset-inline-start:14px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none;display:grid;place-items:center}
+  .search-ic svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+  .filter-search input{padding-inline-start:42px}
+  .filter-label{font-size:14px;font-weight:700;margin:0 0 10px;color:var(--ink)}
+
+  /* domain tiles — clickable category filter, replaces a dropdown */
+  .tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(174px,1fr));gap:12px}
+  .tile{
+    display:flex;flex-direction:column;align-items:flex-start;gap:10px;text-align:start;font:inherit;color:inherit;
+    background:#fff;border:1.5px solid var(--line);border-radius:14px;padding:16px;cursor:pointer;
+    transition:border-color .12s,background .12s,box-shadow .12s;
+  }
+  .tile:hover{border-color:var(--blue);box-shadow:var(--shadow)}
+  .tile:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+  .tile .dom-ic{width:46px;height:46px;border-radius:12px}
+  .tile .dom-ic svg{width:25px;height:25px}
+  .tile-txt{min-width:0;display:flex;flex-direction:column;line-height:1.2}
+  .tile-name{font-size:14.5px;font-weight:600}
+  .tile-count{font-size:12.5px;color:var(--muted);font-variant-numeric:tabular-nums;margin-top:1px}
+  .tile.is-active{border-color:var(--burgundy);background:#FBEEF4}
+  .tile.is-active .dom-ic{background:var(--burgundy);color:#fff}
+  .tile.is-active .tile-count{color:var(--burgundy);font-weight:600}
+  .tile.is-empty{opacity:.4;cursor:not-allowed;filter:grayscale(.5)}
+  .tile.is-empty:hover{border-color:var(--line);box-shadow:none}
+
+  .dropdowns{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:18px;max-width:560px}
+  .clearfilters{background:none;border:none;color:var(--blue);font:inherit;font-weight:600;cursor:pointer;padding:8px 0 0}
+  .clearfilters:hover{text-decoration:underline}
+  .clearfilters:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+  .count{font-size:15px;color:var(--muted);padding:10px 2px 2px}
+
+  /* ---------- cards ----------
+     כיוון עיצוב (Adi, 22.7): אייקונים גדולים ובולטים, פחות מסגרת, יותר אוויר.
+     אין קו מסגרת — הפרדה ברווח ובצל רך; האייקון הוא העוגן הוויזואלי. */
+  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:22px;padding-bottom:44px}
+  /* כרטיס אופקי: פאנל תמונה בשליש השמאלי, טקסט בשני השלישים הימניים (Adi, 22.7) */
+  .card{
+    position:relative;overflow:hidden;
+    background:var(--card);border:none;border-radius:18px;
+    box-shadow:0 1px 2px rgba(16,24,40,.04),0 6px 20px rgba(16,24,40,.06);
+    text-align:start;font:inherit;color:inherit;
+    cursor:pointer;display:flex;flex-direction:row;align-items:stretch;
+    transition:box-shadow .2s,transform .2s;
+  }
+  .card::before{
+    content:"";position:absolute;inset-block-start:0;inset-inline:0;height:3px;z-index:2;
+    background:linear-gradient(90deg,var(--burgundy),var(--blue));
+    transform:scaleX(0);transform-origin:inline-end;transition:transform .3s ease;
+  }
+  .card:hover::before{transform:scaleX(1)}
+  .card:hover{box-shadow:0 6px 16px rgba(16,24,40,.07),0 22px 44px rgba(133,13,74,.11);transform:translateY(-3px)}
+  .card:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+
+  .card-body{flex:1 1 auto;min-width:0;padding:22px 24px;display:flex;flex-direction:column;gap:11px}
+  .card-top{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .num{font-size:13.5px;font-weight:700;color:var(--burgundy);letter-spacing:.02em}
+  .eyebrow{font-size:12.5px;font-weight:700;letter-spacing:.02em;color:var(--blue);margin-bottom:2px}
+  .card h3{font-size:20px;margin:0;line-height:1.28;text-wrap:balance}
+  .card-desc{
+    font-size:14.5px;color:var(--muted);margin:3px 0 0;
+    display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;
+  }
+
+  /* פאנל התמונה — שליש שמאלי. כרגע כיסוי מותג + אייקון (מקום לתמונה אמיתית של עדי). */
+  .card-media{
+    flex:0 0 33%;position:relative;overflow:hidden;
+    background:linear-gradient(150deg,#8f1a56 0%,#5a2f6e 52%,#0d5081 100%);
+    display:grid;place-items:center;
+  }
+  .card-media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+  .card-media .cover-ic{color:rgba(255,255,255,.92);display:grid;place-items:center}
+  .card-media .cover-ic svg{width:52px;height:52px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+  .card:hover .card-media .cover-ic{transform:scale(1.05);transition:transform .25s}
+  .scope-tag{
+    position:absolute;inset-block-start:10px;inset-inline-start:10px;z-index:1;
+    font-size:11.5px;font-weight:700;color:#fff;background:rgba(15,20,25,.34);
+    padding:3px 9px;border-radius:999px;backdrop-filter:blur(2px);
+  }
+  /* אייקון תחום — קו נקי ומונוכרום, לא אימוג'י */
+  .card-main{display:flex;gap:12px;align-items:flex-start}
+  .card-text{min-width:0}
+  .dom-ic{
+    flex:0 0 auto;width:58px;height:58px;border-radius:17px;
+    background:linear-gradient(140deg,rgba(133,13,74,.13),rgba(7,74,122,.16));
+    color:var(--burgundy);display:grid;place-items:center;
+    transition:background .2s,transform .2s;
+  }
+  .card:hover .dom-ic{background:linear-gradient(140deg,rgba(133,13,74,.22),rgba(7,74,122,.27));transform:scale(1.04)}
+  .dom-ic svg{width:30px;height:30px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+  .detail-head .dom-ic{width:60px;height:60px}
+  .detail-head .dom-ic svg{width:31px;height:31px}
+  .detail-title-row{display:flex;gap:14px;align-items:flex-start;margin:6px 0 10px}
+  .chips{display:flex;gap:6px;flex-wrap:wrap}
+  .chip{font-size:13px;padding:3px 10px;border-radius:999px;background:#F0F2F5;color:#3C434C;font-weight:600}
+  .badge{font-size:13px;font-weight:700;padding:4px 11px;border-radius:999px}
+  .badge.ok{background:var(--ok-bg);color:var(--ok-fg)}
+  .badge.warn{background:var(--warn-bg);color:var(--warn-fg)}
+  .badge.info{background:var(--info-bg);color:var(--info-fg)}
+  .badge.off{background:var(--off-bg);color:var(--off-fg)}
+  .badge.new{background:#F6E7EF;color:var(--burgundy)}
+  /* בלי קו מפריד — הפרדה ברווח בלבד (פחות מסגרת) */
+  .card-foot{margin-top:auto;padding-top:4px;display:flex;gap:22px;flex-wrap:wrap;font-size:14px}
+  .foot-item{display:flex;flex-direction:column;gap:1px}
+  .foot-item .k{color:var(--muted);font-size:12.5px}
+  .foot-item .v{font-weight:700;font-size:15px}
+
+  /* ---------- detail ---------- */
+  .back{background:none;border:none;font:inherit;font-size:16px;color:var(--blue);font-weight:600;cursor:pointer;padding:22px 0 6px}
+  .back:hover{text-decoration:underline}
+  .back:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+  .disclaimer{
+    background:#FFF8E8;border:1px solid #E8CF9A;border-inline-start:5px solid #C87A00;
+    border-radius:10px;padding:13px 16px;font-size:15px;margin-bottom:22px;color:#4A3A1A;
+  }
+  .disclaimer strong{color:#6B4A00}
+  .detail-head h1{font-size:31px;margin:6px 0 10px;line-height:1.3}
+  .detail-head .num{font-size:16px}
+  .clocks{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:22px 0}
+  .clock{border-radius:var(--radius);padding:16px 18px;border:1px solid var(--line);background:#fff;box-shadow:var(--shadow)}
+  .clock .who{font-size:13px;font-weight:700;text-transform:none;letter-spacing:.02em;margin-bottom:2px}
+  .clock .lbl{font-size:14px;color:var(--muted)}
+  .clock .val{font-size:25px;font-weight:800;line-height:1.25;margin-top:3px}
+  .clock .note{font-size:14px;margin-top:4px;font-weight:600}
+  .clock.supplier{border-top:4px solid var(--burgundy)}
+  .clock.supplier .who{color:var(--burgundy)}
+  .clock.muni{border-top:4px solid var(--blue)}
+  .clock.muni .who{color:var(--blue)}
+  .clock.expired .val{color:var(--muted)}
+
+  section.block{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:20px;margin-bottom:16px;box-shadow:var(--shadow)}
+  section.block h2{font-size:20px;margin:0 0 14px;padding-bottom:10px;border-bottom:2px solid #F0F2F5}
+  dl.facts{display:grid;grid-template-columns:repeat(2,1fr);gap:14px 26px;margin:0}
+  dl.facts>div{display:flex;flex-direction:column;gap:1px}
+  dl.facts dt{font-size:14px;color:var(--muted)}
+  dl.facts dd{margin:0;font-weight:700}
+  ul.terms{margin:0;padding-inline-start:20px}
+  ul.terms li{margin-bottom:6px}
+
+  .files{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px}
+  .files a{
+    display:flex;align-items:center;gap:11px;padding:12px 14px;border:1px solid var(--line);
+    border-radius:9px;text-decoration:none;color:var(--ink);font-weight:600;background:#FCFCFD;
+  }
+  .files a:hover{border-color:var(--blue);background:#F3F8FC}
+  .files a:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+  .files .ic{font-size:20px;color:var(--burgundy)}
+  .files .sz{margin-inline-start:auto;font-size:13px;color:var(--muted);font-weight:500}
+
+  .updates{list-style:none;margin:0;padding:0}
+  .updates li{padding:11px 0;border-bottom:1px solid var(--line);display:flex;gap:14px}
+  .updates li:last-child{border-bottom:none}
+  .updates .date{font-size:14px;color:var(--muted);min-width:92px;font-weight:600}
+
+  .coord{
+    background:linear-gradient(135deg,#850D4A 0%,#074A7A 100%);
+    color:#fff;border-radius:var(--radius);padding:22px;margin-bottom:26px;
+  }
+  .coord.coord-muted{background:#4A5058}
+  .coord h2{margin:0 0 8px;font-size:21px;color:#fff;border:none;padding:0}
+  .coord p{margin:0 0 14px;font-size:15px;opacity:.95;max-width:60ch}
+  .coord-lines{display:flex;gap:26px;flex-wrap:wrap}
+  .coord-lines a,.coord-lines span{color:#fff;font-weight:700;font-size:17px;text-decoration:none;display:flex;align-items:center;gap:8px}
+  .coord-lines a:hover{text-decoration:underline}
+  .coord-lines a:focus-visible{outline:3px solid #fff;outline-offset:3px;border-radius:4px}
+
+  /* ---------- רכישת מסמכי מכרז ---------- */
+  .buy-block{display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap}
+  .buy-block h2{border:none;padding:0;margin:0 0 4px}
+  .buy-block .sub{font-size:14px;color:var(--muted);margin:0}
+  .buy-action{display:flex;align-items:center;gap:16px}
+  .buy-price{font-size:24px;font-weight:800;color:var(--ink);font-variant-numeric:tabular-nums}
+  .buy-btn{
+    font:inherit;font-size:16px;font-weight:700;color:#fff;cursor:pointer;
+    background:var(--burgundy);border:none;border-radius:10px;padding:12px 22px;
+    display:inline-flex;align-items:center;gap:8px;transition:background .15s;
+  }
+  .buy-btn:hover{background:var(--burgundy-dark)}
+  .buy-btn:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+  .buy-note{width:100%;margin:14px 0 0;padding:11px 14px;background:#F7F8FA;border-radius:8px;font-size:14px;color:var(--ink)}
+  .card-buy{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:var(--burgundy);margin-top:2px}
+
+  footer.site{border-top:1px solid var(--line);background:#fff;margin-top:20px;padding:22px 0;font-size:14px;color:var(--muted)}
+  footer.site a{color:var(--blue)}
+
+  .hidden{display:none}
+  .empty{background:#fff;border:1px dashed #C8CDD4;border-radius:var(--radius);padding:34px;text-align:center;color:var(--muted)}
+
+  @media (max-width:760px){
+    body{font-size:16px}
+    .grid,.clocks,dl.facts,.dropdowns{grid-template-columns:1fr}
+    .tiles{grid-template-columns:1fr 1fr;gap:8px}
+    .tile{padding:12px;gap:8px}
+    .tile .dom-ic{width:40px;height:40px}
+    .tile-name{font-size:14px}
+    .toolbar{flex-direction:column;align-items:stretch;gap:12px;margin:16px 0 6px}
+    .toolbar .filter-search{flex-basis:auto}
+    .scope-tabs{justify-content:center}
+    .stats{gap:20px}
+    /* בנייד הכרטיס נערם: פאנל התמונה הופך לרצועה עליונה, הטקסט מתחתיו */
+    .card{flex-direction:column}
+    .card-media{flex-basis:auto;height:118px;order:-1}
+    .card-media .cover-ic svg{width:44px;height:44px}
+    .card-body{padding:18px 18px 16px}
+    .intro h1{font-size:25px}
+    .detail-head h1{font-size:24px}
+    .site-contact{margin-inline-start:0;text-align:start;width:100%}
+    .logo{height:46px}
+  }
+</style>
+</head>
+<body>
+
+<a class="skip" href="#main">דילוג לתוכן הראשי</a>
+
+<div class="demo" id="previewBar">
+  גרסת תצוגה מקדימה
+  <button type="button" class="demo-x" id="previewX" aria-label="סגירת ההודעה">✕</button>
+</div>
+
+<header class="site">
+  <div class="wrap site-inner">
+    <img class="logo" src="data:image/png;base64,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" alt="אשכול נגב מזרחי">
+    <div>
+      <p class="site-title">מכרזי אשכול נגב מזרחי</p>
+      <p class="site-sub">מכרזים והסכמי מסגרת של האשכול והרשויות</p>
+    </div>
+    <div class="site-contact">
+      לשאלות ותיאום<br>
+      <a href="tel:080000000">08-000-0000</a>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- ============ LIST VIEW ============ -->
+  <div id="view-list" class="wrap">
+    <div class="intro">
+      <h1>מכרזים והסכמי מסגרת של אשכול נגב מזרחי</h1>
+      <p class="intro-sub">הרשויות החברות באשכול יכולות להצטרף להסכמי המסגרת המשותפים <strong>בהליך פטור ממכרז</strong> — ולחסוך זמן, כסף ובירוקרטיה. בחרו תחום, סננו וצפו בכל המכרזים ישירות, ללא הרשמה.</p>
+      <div class="stats" id="stats" role="status" aria-live="polite"></div>
+    </div>
+
+    <div class="toolbar">
+      <div class="field filter-search">
+        <label for="q" class="skip">חיפוש חופשי</label>
+        <span class="search-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg></span>
+        <input type="search" id="q" placeholder="חיפוש מכרז, מספר או מילת מפתח">
+      </div>
+      <div class="scope-tabs" id="scopeTabs" role="tablist" aria-label="סוג המכרז">
+        <button type="button" class="scope-tab is-on" data-scope="משותף" role="tab">מכרזים משותפים לרשויות</button>
+        <button type="button" class="scope-tab" data-scope="אשכול" role="tab">מכרזי האשכול</button>
+      </div>
+    </div>
+
+    <div class="filters">
+      <p class="filter-label" id="tiles-label">בחירת תחום</p>
+      <div class="tiles" id="tiles" role="group" aria-labelledby="tiles-label"></div>
+
+      <div class="dropdowns">
+        <div class="field">
+          <label for="st">סטטוס המכרז</label>
+          <select id="st">
+            <option value="">כל הסטטוסים</option>
+            <option value="open">פתוח להגשה</option>
+            <option value="valid">סגור להגשה — הסכם בתוקף</option>
+            <option value="archived">ארכיון</option>
+          </select>
+        </div>
+      </div>
+
+      <button type="button" class="clearfilters hidden" id="clearBtn">✕ ניקוי כל הסינונים</button>
+    </div>
+
+    <div id="resultsAnchor" style="scroll-margin-top:12px"></div>
+    <p class="count" id="count" role="status" aria-live="polite"></p>
+    <div class="grid" id="grid"></div>
+  </div>
+
+  <!-- ============ DETAIL VIEW ============ -->
+  <div id="view-detail" class="wrap hidden"></div>
+
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    אשכול נגב מזרחי · <a href="#" onclick="return false">הצהרת נגישות</a> · <a href="#" onclick="return false">יצירת קשר</a>
+    <br>אב טיפוס לצורכי אפיון — יולי 2026
+  </div>
+</footer>
+
+<script>
+"use strict";
+
+// ---- "today" for the prototype ----
+const TODAY = new Date(2026, 6, 21); // 21.7.2026
+
+const CONTACT = { name:"נופר", phone:"08-000-0000", tel:"080000000", mail:"michrazim@example.org" };
+
+// ---- demo data (mirrors the Excel template columns) ----
+const TENDERS = [
+  { scope:"משותף", num:"04/2024", name:"מכרז מסגרת לאספקת ציוד משרדי", short:"ציוד משרדי ונייר", desc:"מכרז מסגרת לאספקת ציוד משרדי, נייר ומוצריו לרשויות האשכול, בשיטת הנחה על מחירון.", domain:"רכש וטובין", type:"מכרז מסגרת", body:"אשכול נגב מזרחי", partners:"", relevant:"כל רשויות האשכול", published:"2026-07-22", questions:"", tour:"", tourReq:"", deadline:"", deadlineTime:"12:00", validUntil:"", cost:0, estimate:"", guarantee:0, terms:[], winners:["ואואדו בע\"מ", "קרביץ (1974) בע\"מ"], notes:"הנחות לפי פרקים: א' ציוד משרדי, ב' נייר ומוצריו.", files:[], updates:[], updated:"2026-07-22", lead:"" },
+  { scope:"משותף", num:"07/2024", name:"מכרז למתן שירותי סקר נכסים", short:"סקר נכסים", desc:"מכרז לביצוע סקר נכסים (מדידה וסיווג נכסים לצורכי ארנונה) ברשויות האשכול.", domain:"GIS ונתונים", type:"מכרז מסגרת", body:"אשכול נגב מזרחי", partners:"", relevant:"כל רשויות האשכול", published:"2026-07-22", questions:"", tour:"", tourReq:"", deadline:"", deadlineTime:"12:00", validUntil:"", cost:0, estimate:"", guarantee:0, terms:[], winners:["קלימי אורן (דורג ראשון)", "א.ש.ד ניהול נכסים (1993) בע\"מ", "ש.ל.מ - שירותים לרשויות מקומיות בע\"מ"], notes:"תמחור לפי מקדם מחיר לקבוצות סיווג נכסים.", files:[], updates:[], updated:"2026-07-22", lead:"" },
+  { scope:"משותף", num:"13/2024", name:"מכרז מסגרת לאספקת ציוד מחשוב", short:"ציוד מחשוב", desc:"מכרז מסגרת לאספקת מחשבים נייחים וניידים, תחנות עגינה וציוד מחשוב לרשויות האשכול.", domain:"דיגיטציה ומחשוב", type:"מכרז מסגרת", body:"אשכול נגב מזרחי", partners:"", relevant:"כל רשויות האשכול", published:"2026-07-22", questions:"", tour:"", tourReq:"", deadline:"", deadlineTime:"12:00", validUntil:"", cost:0, estimate:"", guarantee:0, terms:[], winners:["נס מטח", "דיקל ב. איתני"], notes:"תמחור לפי מחירון פריטים; אחריות 3 שנים באתר לקוח.", files:[], updates:[], updated:"2026-07-22", lead:"" },
+  { scope:"משותף", num:"06/2025", name:"מכרז מסגרת לאספקת מיכלי אצירה", short:"מיכלי אצירה", desc:"מכרז מסגרת לאספקת מיכלי אצירה מפלסטיק וממתכת, מונחי וטמוני קרקע, לרשויות האשכול.", domain:"איכות הסביבה", type:"מכרז מסגרת", body:"אשכול נגב מזרחי", partners:"", relevant:"כל רשויות האשכול", published:"2026-07-22", questions:"", tour:"", tourReq:"", deadline:"", deadlineTime:"12:00", validUntil:"", cost:0, estimate:"", guarantee:0, terms:[], winners:["דולב מוצרי פלסטיק אגש\"ח בע\"מ", "חן המקום בע\"מ", "רגא אקולוגיות בע\"מ", "ש.י.א אשקלון בע\"מ", "קבוצת אלון בע\"מ"], notes:"מחולק לפרקים א'-ד' לפי סוג המיכל.", files:[], updates:[], updated:"2026-07-22", lead:"" },
+  { scope:"משותף", num:"08/2025", name:"מכרז לרכישה ואספקת תווי שי לחג ותווי קניה", short:"תווי שי וקנייה", desc:"מכרז לרכישת תווי שי לחג ותווי קניה לעובדי הרשויות, בשיטת הנחה.", domain:"רכש וטובין", type:"מכרז מסגרת", body:"אשכול נגב מזרחי", partners:"", relevant:"כל רשויות האשכול", published:"2026-07-22", questions:"", tour:"", tourReq:"", deadline:"", deadlineTime:"12:00", validUntil:"", cost:0, estimate:"", guarantee:0, terms:[], winners:["ח.מ. תשורות חן (1987) בע\"מ (מקום ראשון)", "גלובל ריטייל ק.י. (ע.ר.) בע\"מ - קרפור (מקום שני)", "כ.נ מחסני השוק בע\"מ (מקום שלישי)"], notes:"", files:[], updates:[], updated:"2026-07-22", lead:"" },
+  { scope:"משותף", num:"דש/11/2025", name:"מכרז מסגרת לאספקת דלקים", short:"אספקת דלקים", desc:"מכרז מסגרת לאספקת דלקים ותדלוק כלי רכב לרשויות האשכול.", domain:"רכש וטובין", type:"מכרז מסגרת", body:"אשכול נגב מזרחי", partners:"", relevant:"כל רשויות האשכול", published:"2026-07-22", questions:"", tour:"", tourReq:"", deadline:"", deadlineTime:"12:00", validUntil:"", cost:0, estimate:"", guarantee:0, terms:[], winners:["פרק א': סונול ישראל בע\"מ", "דור אלון אנרגיה בישראל (1988) בע\"מ", "דלק חברת הדלק הישראלית בע\"מ", "פז קמעונאות ואנרגיה בע\"מ", "פרק ב': דלקל אנרגיה (2004) בע\"מ", "דלק אש בע\"מ"], notes:"מחולק לפרק א' ופרק ב'.", files:[], updates:[], updated:"2026-07-22", lead:"" },
+  { scope:"משותף", num:"01/2026", name:"מכרז מסגרת לתכנון מוסדות חינוך ומבני ציבור", short:"תכנון מוסדות חינוך", desc:"מכרז מסגרת למתן שירותי אדריכלות ותכנון מוסדות חינוך ומבני ציבור לרשויות האשכול.", domain:"תכנון, תשתיות ובינוי", type:"מכרז מסגרת", body:"אשכול נגב מזרחי", partners:"", relevant:"כל רשויות האשכול", published:"2026-02-12", questions:"2026-01-26", tour:"", tourReq:"", deadline:"2026-02-12", deadlineTime:"12:00", validUntil:"", cost:0, estimate:"", guarantee:0, terms:[], winners:["דאטום אדריכלים מהנדסים ויועצים", "מיכל שיין אדריכלות ויזמות בע\"מ", "בתיה סבירסקי מלול - באה אדריכלים", "א.ב. מתכננים בע\"מ", "נופר דוד אדריכלים ומתכנני ערים בע\"מ", "שושני, סומברג, טמיר אדריכלים בע\"מ"], notes:"פרק א' - מבנים עד 1,000 מ\"ר; פרק ב' - מבנים מעל 1,000 מ\"ר.", files:[], updates:[], updated:"2026-07-22", lead:"אליעזר + דוד רן יה" },
+  { scope:"משותף", num:"02/2026", name:"מכרז מסגרת למתן שירותי אדריכלות נוף", short:"אדריכלות נוף", desc:"מכרז מסגרת לבחירת אדריכלי נוף למתן שירותי תכנון לרשויות האשכול.", domain:"תכנון, תשתיות ובינוי", type:"מכרז מסגרת", body:"אשכול נגב מזרחי", partners:"", relevant:"כל רשויות האשכול", published:"2026-02-26", questions:"2026-02-09", tour:"", tourReq:"", deadline:"2026-02-26", deadlineTime:"12:00", validUntil:"", cost:0, estimate:"", guarantee:0, terms:[], winners:["דודו אילת – קקטוס עירוני", "דוד אלחנתי אדריכלות נוף בע\"מ", "נופים – תכנון, ניהול ועיצוב בע\"מ", "מקום – אדריכלות נוף ותכנון עירוני בע\"מ"], notes:"", files:[], updates:[], updated:"2026-07-22", lead:"אליעזר + דוד רן יה" },
+  { scope:"משותף", num:"03/2026", name:"מכרז מסגרת לשירותי אדריכלות ותכנון תב\"ע, שימור ותיקי תיעוד", short:"תכנון תב\"ע ושימור", desc:"מכרז מסגרת למתן שירותי אדריכלות ותכנון תב\"ע, אדריכלות שימור והכנת תיקי תיעוד.", domain:"תכנון, תשתיות ובינוי", type:"מכרז מסגרת", body:"אשכול נגב מזרחי", partners:"", relevant:"כל רשויות האשכול", published:"2026-03-15", questions:"2026-03-01", tour:"", tourReq:"", deadline:"2026-03-15", deadlineTime:"12:00", validUntil:"", cost:0, estimate:"", guarantee:0, terms:[], winners:["פליישר הדרי אדריכלים", "אלונה ליפשיץ אדריכלים בע\"מ", "שיפמן – נתן אדריכלים", "אמנון בר אור-טל גזית אדריכלים בע\"מ", "אלטמן אדריכלים בע\"מ", "שושני, סומברג, טמיר אדריכלים בע\"מ"], notes:"פרק א' - תכנון תב\"ע; פרק ב' - אדריכלות שימור; פרק ג' - הכנת תיקי תיעוד.", files:[], updates:[], updated:"2026-07-22", lead:"אליעזר + דוד רן יה" },
+  { scope:"משותף", num:"05/2026", name:"מכרז להתקשרות עם אתרי קצה לטיפול בפסולת", short:"אתרי קצה לפסולת", desc:"מכרז להתקשרות עם אתרים לקליטה, טיפול ומיון של פסולת מסוגים שונים.", domain:"איכות הסביבה", type:"מכרז מסגרת", body:"אשכול נגב מזרחי", partners:"", relevant:"כל רשויות האשכול", published:"2026-02-12", questions:"2026-01-26", tour:"", tourReq:"", deadline:"2026-02-12", deadlineTime:"12:00", validUntil:"", cost:0, estimate:"", guarantee:0, terms:[], winners:["קבוצת טלאור כראדי בע\"מ", "א.מ.צ תעשיות מחזור פסולת בע\"מ"], notes:"תמחור לטון לפי סוג פסולת ואתר (אשל הנשיא / נאות חובב).", files:[], updates:[], updated:"2026-07-22", lead:"ירין + הילה" },
+  { scope:"משותף", num:"06/2026", name:"מאגר יועצים למתן שירותי ייעוץ בתחומים שונים", short:"מאגר יועצים", desc:"מאגר ספקים/יועצים למתן שירותי ייעוץ בתחומים שונים (כלכלה, סביבה, חברה ועוד) לרשויות האשכול.", domain:"ייעוץ", type:"מאגר ספקים/יועצים", body:"אשכול נגב מזרחי", partners:"", relevant:"כל רשויות האשכול", published:"2026-07-22", questions:"2026-02-05", tour:"", tourReq:"", deadline:"", deadlineTime:"12:00", validUntil:"", cost:0, estimate:"", guarantee:0, terms:[], winners:["א.ח. איתנים פתרונות פיננסים בע\"מ", "אופיר בוכניק ושות' - רואי חשבון", "אורבניקס בע\"מ", "אמן ארגון ומדעי ניהול יועצים בע\"מ", "אינרייז (אינקיואל ישראל) בע\"מ", "ארנון רונד יועצים בע\"מ", "אשחר ארגון שירותי חברה ורווחה בע\"מ", "גפן ייעוץ ופיתוח ארגוני", "ד.ה.ב מד בע\"מ", "נגב אי.אנ.וי ייעוץ סביבתי בע\"מ", "צעד ירוק", "שחר שילה"], notes:"יועצים מסווגים לקבוצות: כלכלה, איכות הסביבה, תיירות, תעסוקה, שירותים חברתיים, פיתוח וגיוס משאבים.", files:[], updates:[], updated:"2026-07-22", lead:"דגנית" },
+  { scope:"משותף", num:"רצ/04/2026", name:"מכרז מסגרת לאספקת ריהוט", short:"ריהוט", desc:"מכרז מסגרת לאספקת ריהוט למוסדות חינוך, גני ילדים, מתקני חצר וריהוט משרדי לרשויות האשכול.", domain:"רכש וטובין", type:"מכרז מסגרת", body:"אשכול נגב מזרחי", partners:"", relevant:"כל רשויות האשכול", published:"2026-05-31", questions:"2026-05-14", tour:"", tourReq:"", deadline:"2026-05-31", deadlineTime:"12:00", validUntil:"", cost:0, estimate:"", guarantee:0, terms:[], winners:["ש.ת פעלתון בע\"מ", "עידן אל גני בע\"מ", "גיל ה. פרוייקטים", "גיפליי מבית גיל תייר בע\"מ", "א.ד מירז תעשיות בע\"מ", "רהיטי הכח (1991) בע\"מ", "איכות המשחק (ס.ק) בע\"מ", "ארגמן מתכת בע\"מ", "גן גנית בע\"מ", "אי. אמ. שגב תעשיות בע\"מ", "א.ל.ן תעשיות בע\"מ"], notes:"מחולק לפרקים א'-ז' לפי סוג הריהוט.", files:[], updates:[], updated:"2026-07-22", lead:"דגנית" },
+  { scope:"משותף", num:"07/2026", name:"מכרז לביצוע עבודות במתקנים לייצור חשמל בטכנולוגיית PV", short:"מתקני חשמל PV", desc:"מכרז לביצוע עבודות הקמה והפעלה של מתקנים לייצור חשמל בטכנולוגיה פוטו-וולטאית (PV) ברשויות האשכול.", domain:"אנרגיה", type:"מכרז מסגרת", body:"אשכול נגב מזרחי", partners:"", relevant:"כל רשויות האשכול", published:"2026-03-01", questions:"2026-02-10", tour:"", tourReq:"", deadline:"2026-03-01", deadlineTime:"12:00", validUntil:"", cost:0, estimate:"", guarantee:0, terms:[], winners:[], notes:"", files:[], updates:[], updated:"2026-07-22", lead:"חן המאירי" },
+  { scope:"משותף", num:"08/2026", name:"מכרז לתכנון, רישוי, הקמה ותחזוקה של סככות סולאריות (PV)", short:"סככות סולאריות", desc:"מכרז לתכנון, רישוי, הקמה ותחזוקה של סככות נושאות מערכות פוטו-וולטאיות ברשויות האשכול.", domain:"אנרגיה", type:"מכרז מסגרת", body:"אשכול נגב מזרחי", partners:"", relevant:"כל רשויות האשכול", published:"2026-03-08", questions:"2026-02-19", tour:"", tourReq:"", deadline:"2026-03-08", deadlineTime:"12:00", validUntil:"", cost:0, estimate:"", guarantee:0, terms:[], winners:[], notes:"", files:[], updates:[], updated:"2026-07-22", lead:"חן המאירי" },
+  { scope:"משותף", num:"09/2026", name:"מכרז למתן שירותי ניהול ופיקוח על ביצוע עבודות הנדסה בנאיות", short:"ניהול ופיקוח הנדסי", desc:"מכרז למתן שירותי ניהול ופיקוח על ביצוע עבודות הנדסה בנאיות ברשויות האשכול.", domain:"תכנון, תשתיות ובינוי", type:"מכרז מסגרת", body:"אשכול נגב מזרחי", partners:"", relevant:"כל רשויות האשכול", published:"2026-06-21", questions:"2026-06-07", tour:"", tourReq:"", deadline:"2026-06-21", deadlineTime:"12:00", validUntil:"", cost:0, estimate:"", guarantee:0, terms:[], winners:[], notes:"", files:[], updates:[], updated:"2026-07-22", lead:"חן המאירי" },
+  { scope:"משותף", num:"11/2026", name:"מכרז למתן שירותי פרוייקטור לפילוט פזורות", short:"פרוייקטור פזורות", desc:"מכרז למתן שירותי פרוייקטור לפרוייקט פילוט בפזורה.", domain:"ייעוץ", type:"מכרז מסגרת", body:"אשכול נגב מזרחי", partners:"", relevant:"כל רשויות האשכול", published:"2026-05-10", questions:"2026-04-26", tour:"", tourReq:"", deadline:"2026-05-10", deadlineTime:"12:00", validUntil:"", cost:0, estimate:"", guarantee:0, terms:[], winners:[], notes:"", files:[], updates:[], updated:"2026-07-22", lead:"לידור" },
+  { scope:"משותף", num:"12/2026", name:"מכרז לרכישת מרסקות גזם ומיני מעמיס", short:"מרסקות גזם", desc:"מכרז לרכישת מרסקות גזם ומיני מעמיס לרשויות האשכול.", domain:"איכות הסביבה", type:"מכרז מסגרת", body:"אשכול נגב מזרחי", partners:"", relevant:"כל רשויות האשכול", published:"2026-05-10", questions:"2026-04-26", tour:"", tourReq:"", deadline:"2026-05-10", deadlineTime:"12:00", validUntil:"", cost:0, estimate:"", guarantee:0, terms:[], winners:[], notes:"", files:[], updates:[], updated:"2026-07-22", lead:"ירין + הילה" },
+  { scope:"משותף", num:"13/2026", name:"מכרז למתן שירותי תחזוקה, ניטור ותפעול של מערכות פוטו-וולטאיות (PV)", short:"תחזוקת מערכות PV", desc:"מכרז למתן שירותי תחזוקה, ניטור ותפעול של מערכות פוטו-וולטאיות (PV) ברשויות האשכול.", domain:"אנרגיה", type:"מכרז מסגרת", body:"אשכול נגב מזרחי", partners:"", relevant:"כל רשויות האשכול", published:"2026-05-10", questions:"2026-04-26", tour:"", tourReq:"", deadline:"2026-05-10", deadlineTime:"12:00", validUntil:"", cost:0, estimate:"", guarantee:0, terms:[], winners:[], notes:"", files:[], updates:[], updated:"2026-07-22", lead:"חן המאירי" },
+  { scope:"משותף", num:"14/2026", name:"מכרז לאספקת מערכת פיקוח וסדר ציבורי", short:"מערכת פיקוח וסדר ציבורי", desc:"מכרז לאספקה והתקנה של מערכת פיקוח וסדר ציבורי ברשויות האשכול.", domain:"חירום", type:"מכרז מסגרת", body:"אשכול נגב מזרחי", partners:"", relevant:"כל רשויות האשכול", published:"2026-06-07", questions:"2026-05-24", tour:"", tourReq:"", deadline:"2026-06-07", deadlineTime:"12:00", validUntil:"", cost:0, estimate:"", guarantee:0, terms:[], winners:[], notes:"", files:[], updates:[], updated:"2026-07-22", lead:"בניה" },
+  { scope:"משותף", num:"15/2026", name:"מכרז לביצוע עבודות במתקנים לייצור חשמל בטכנולוגיית PV", short:"מתקני חשמל PV", desc:"מכרז לביצוע עבודות הקמה והפעלה של מתקנים לייצור חשמל בטכנולוגיה פוטו-וולטאית (PV) ברשויות האשכול.", domain:"אנרגיה", type:"מכרז מסגרת", body:"אשכול נגב מזרחי", partners:"", relevant:"כל רשויות האשכול", published:"2026-06-14", questions:"2026-06-04", tour:"", tourReq:"", deadline:"2026-06-14", deadlineTime:"12:00", validUntil:"", cost:0, estimate:"", guarantee:0, terms:[], winners:[], notes:"", files:[], updates:[], updated:"2026-07-22", lead:"חן המאירי" },
+  { scope:"משותף", num:"16/2026", name:"מכרז לתכנון, רישוי, הקמה ותחזוקה של סככות סולאריות (PV)", short:"סככות סולאריות", desc:"מכרז לתכנון, רישוי, הקמה ותחזוקה של סככות נושאות מערכות פוטו-וולטאיות ברשויות האשכול.", domain:"אנרגיה", type:"מכרז מסגרת", body:"אשכול נגב מזרחי", partners:"", relevant:"כל רשויות האשכול", published:"2026-06-14", questions:"2026-06-04", tour:"", tourReq:"", deadline:"2026-06-14", deadlineTime:"12:00", validUntil:"", cost:0, estimate:"", guarantee:0, terms:[], winners:[], notes:"", files:[], updates:[], updated:"2026-07-22", lead:"חן המאירי" },
+  { scope:"משותף", num:"17/2026", name:"מכרז למתן שירותי פינוי וטיפול בפסולת אלקטרונית", short:"פסולת אלקטרונית", desc:"מכרז למתן שירותי פינוי וטיפול בפסולת אלקטרונית ובסוללות ברשויות האשכול, כולל איסוף, הפרדה וטיפול סביבתי.", domain:"איכות הסביבה", type:"מכרז מסגרת", body:"אשכול נגב מזרחי", partners:"", relevant:"כל רשויות האשכול", published:"2026-06-25", questions:"2026-07-02", tour:"", tourReq:"", deadline:"2026-08-06", deadlineTime:"12:00", validUntil:"", cost:1000, estimate:"", guarantee:0, terms:["רישיון להובלת וטיפול בפסולת אלקטרונית","עמידה בדרישות תקנות פסולת אלקטרונית"], winners:[], notes:"", files:[{n:"17-2026_מסמכי-מכרז.pdf", s:"1.2 MB"},{n:"17-2026_תשובות-הבהרה.pdf", s:"280 KB"}], updates:[{d:"2026-07-10", t:"פורסמו תשובות לשאלות הבהרה."},{d:"2026-07-13", t:"מועד ההגשה הוארך."}], updated:"2026-07-22", lead:"ירין + הילה" },
+];
+
+// ---------- אייקוני תחום ----------
+// אייקוני קו מונוכרומיים, בסגנון רשמי. לא אימוג'י — אימוג'י נראה שונה בכל
+// מכשיר ומוריד מהרשמיות של אתר של גוף ציבורי.
+// אייקון לכל קטגוריה. שמונה הקטגוריות של האשכול (Adi, 21.7.2026).
+const ICONS = {
+  "איכות הסביבה":     '<path d="M4 20c0-8 6-14 16-14 0 10-6 14-12 14H4z"/><path d="M4.5 19.5c3.5-3.5 6.5-5.5 10.5-7.5"/>',
+  "שירותים חברתיים":  '<circle cx="9" cy="8" r="3"/><path d="M3 20a6 6 0 0112 0M16.5 5.4a3 3 0 010 5.2M21 20a6 6 0 00-3.6-5.5"/>',
+  "דיגיטציה ומחשוב":  '<rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/>',
+  "GIS ונתונים":      '<path d="M12 21c4-4.5 7-7.8 7-11a7 7 0 10-14 0c0 3.2 3 6.5 7 11z"/><circle cx="12" cy="10" r="2.5"/>',
+  "אנרגיה":           '<path d="M13 2 5 13h5l-1 9 8-12h-5l1-8z"/>',
+  "ייעוץ":            '<rect x="2" y="7" width="20" height="13" rx="2"/><path d="M8 7V5a2 2 0 012-2h4a2 2 0 012 2v2M2 12.5h20"/>',
+  "חירום":            '<path d="M12 3l8 3v6c0 5-3.4 8.2-8 9-4.6-.8-8-4-8-9V6l8-3z"/><path d="M12 9v4M12 16h.01"/>',
+  "תכנון, תשתיות ובינוי": '<path d="M4 21V5l8-3v19M12 21V9l7 3v9M3 21h18M7 8h2M7 12h2M7 16h2M15 14h1.5M15 18h1.5"/>',
+  "רכש וטובין":       '<path d="M21 8l-9-5-9 5 9 5 9-5z"/><path d="M3 8v8l9 5 9-5V8M12 13v8"/>',
+  "אחר":              '<path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8l-5-5z"/><path d="M14 3v5h5M9 13h6M9 17h4"/>'
+};
+function iconFor(domain){
+  const p = ICONS[domain] || ICONS["אחר"];
+  return `<span class="dom-ic" aria-hidden="true"><svg viewBox="0 0 24 24">${p}</svg></span>`;
+}
+
+// פאנל התמונה של הכרטיס (שליש שמאלי). IMAGES ממפה קטגוריה → תמונה (data URI).
+// כרגע ריק — עדי תספק תמונות אמיתיות, אחת לכל קטגוריה. עד אז מוצג כיסוי מותג
+// עם אייקון הקטגוריה. כדי להוסיף תמונה: IMAGES["אנרגיה"] = "data:image/jpeg;base64,…".
+const IMAGES = {};
+function mediaFor(t){
+  const scopeTag = t.scope === "אשכול" ? "מכרז האשכול" : "משותף לרשויות";
+  const inner = IMAGES[t.domain]
+    ? `<img src="${IMAGES[t.domain]}" alt="">`
+    : `<span class="cover-ic" aria-hidden="true"><svg viewBox="0 0 24 24">${ICONS[t.domain]||ICONS["אחר"]}</svg></span>`;
+  return `<div class="card-media"><span class="scope-tag">${scopeTag}</span>${inner}</div>`;
+}
+
+// שם קצר לכרטיס. אם לא הוזן — נגזר מהשם המלא בהסרת הקידומת החוזרת
+// ("מכרז מסגרת ל...", "מכרז פומבי ל..."), שאינה מוסיפה מידע בכרטיס.
+function shortName(t){
+  if (t.short) return t.short;
+  return t.name
+    .replace(/^(מכרז|הליך)\s+(מסגרת|פומבי|משותף|זוטא)?\s*(משותף)?\s*/,"")
+    .replace(/^ל(אספקת|שירותי|עבודות)\s*/,"")
+    .replace(/\s+—.*$/,"")
+    .trim() || t.name;
+}
+
+// ---------- helpers ----------
+const d = s => s ? new Date(s+"T00:00:00") : null;
+const fmt = s => { const x=d(s); return x ? x.toLocaleDateString("he-IL",{day:"2-digit",month:"2-digit",year:"numeric"}) : "—"; };
+const days = s => Math.ceil((d(s) - TODAY) / 86400000);
+
+function statusOf(t){
+  const dl = t.deadline ? days(t.deadline) : null;
+  const vu = t.validUntil ? days(t.validUntil) : null;
+  if (dl !== null && dl >= 0) return dl <= 14 ? "soon" : "open";
+  if (vu !== null) return vu >= 0 ? "valid" : "archived";
+  // מועד ההגשה עבר (או לא קיים) ואין תאריך תוקף מפורש:
+  // הסכם מסגרת / מאגר עדיין פעיל להצטרפות; מכרז חד-פעמי עובר לארכיון.
+  return /מסגרת|מאגר/.test(t.type || "") ? "valid" : "archived";
+}
+const STATUS_META = {
+  open:    {cls:"ok",   txt:"פתוח להגשה",         group:"open"},
+  soon:    {cls:"warn", txt:"נסגר בקרוב",         group:"open"},
+  valid:   {cls:"info", txt:"הסכם פעיל · אפשר להצטרף", group:"valid"},
+  archived:{cls:"off",  txt:"בארכיון",            group:"archived"}
+};
+// התג "עודכן" מסמן פרסום הבהרה/עדכון תוכן ב-30 הימים האחרונים —
+// לא סתם נגיעה בשורה באקסל. אחרת התג מופיע על הכול ומאבד משמעות.
+function isUpdatedRecently(t){
+  if (statusOf(t) === "archived") return false;
+  return t.updates.some(u => days(u.d) >= -30);
+}
+
+// ---------- list ----------
+const grid = document.getElementById("grid");
+const countEl = document.getElementById("count");
+const qEl = document.getElementById("q");
+const stEl = document.getElementById("st");
+const tilesEl = document.getElementById("tiles");
+const clearBtn = document.getElementById("clearBtn");
+const resultsAnchor = document.getElementById("resultsAnchor");
+
+// קטגוריות האשכול (Adi, 21.7.2026) — רשימה קבועה, כך שכל קטגוריה מוצגת גם אם
+// אין בה מכרזים כרגע. "רכש וטובין" נוסף זמנית ב-22.7 לכיסוי מכרזי הרכש שבאקסל.
+const DOMAINS = [
+  "שירותים חברתיים","איכות הסביבה","דיגיטציה ומחשוב","GIS ונתונים",
+  "אנרגיה","ייעוץ","חירום","תכנון, תשתיות ובינוי","רכש וטובין"
+];
+
+// מצב הסינון. selScope הוא ההפרדה העליונה: מכרזים משותפים לרשויות מול מכרזי האשכול.
+let selScope = "משותף", selDomain = "", selStatus = "", query = "";
+
+const searchText = t => `${t.name} ${t.desc} ${t.num} ${t.domain} ${t.body}`;
+
+// קבוצת מכרזים לפי צירוף מסננים. ההפרדה (scope) חלה תמיד — הכרטיסיות והספירות
+// משקפות רק את סוג המכרז שנבחר בלשוניות למעלה.
+function subset({domain="", status=""}){
+  return TENDERS.filter(t=>{
+    if ((t.scope || "משותף") !== selScope) return false;
+    if (domain && t.domain !== domain) return false;
+    if (status && STATUS_META[statusOf(t)].group !== status) return false;
+    if (query && !searchText(t).includes(query)) return false;
+    return true;
+  });
+}
+
+function cardHTML(t){
+  const st = statusOf(t), m = STATUS_META[st];
+  const dl = days(t.deadline);
+  let footA, footB;
+  if (m.group === "open"){
+    footA = {k:"מועד אחרון להגשה", v: fmt(t.deadline) + " · " + t.deadlineTime};
+    footB = {k:"נותרו", v: dl === 0 ? "היום!" : dl + " ימים"};
+  } else if (st === "valid"){
+    footA = t.winners && t.winners.length
+      ? {k:"ספקים בהסכם", v: t.winners.length}
+      : {k:"סטטוס", v:"בהליך בחירה"};
+    footB = t.validUntil ? {k:"בתוקף עד", v: fmt(t.validUntil)} : {k:"הצטרפות", v:"פתוחה"};
+  } else {
+    footA = {k:"הסתיים בתאריך", v: fmt(t.validUntil || t.deadline)};
+    footB = {k:"סטטוס", v:"ארכיון"};
+  }
+  return `
+    <button class="card is-${st}" data-num="${t.num}">
+      <div class="card-body">
+        <div class="card-top">
+          <span class="num">מכרז ${t.num}</span>
+          <span class="badge ${m.cls}">${m.txt}</span>
+          ${isUpdatedRecently(t) ? '<span class="badge new">עודכן</span>' : ''}
+        </div>
+        <div class="eyebrow">${t.domain}${t.type ? " · " + t.type : ""}</div>
+        <h3>${shortName(t)}</h3>
+        <p class="card-desc">${t.desc}</p>
+        <div class="card-foot">
+          <span class="foot-item"><span class="k">${footA.k}</span><span class="v">${footA.v}</span></span>
+          <span class="foot-item"><span class="k">${footB.k}</span><span class="v">${footB.v}</span></span>
+        </div>
+      </div>
+      ${mediaFor(t)}
+    </button>`;
+}
+
+// כרטיסיות הקטגוריה. הספירה מתחשבת בסטטוס ובחיפוש הפעילים;
+// קטגוריה ללא מכרזים תואמים מתעמעמת.
+function renderTiles(){
+  tilesEl.innerHTML = DOMAINS.map(dom=>{
+    const n = subset({domain:dom, status:selStatus}).length;
+    const active = selDomain === dom;
+    const empty = n === 0 && !active;
+    return `<button type="button" class="tile ${active?'is-active':''} ${empty?'is-empty':''}"
+              data-dom="${dom}" ${empty?'disabled':''} aria-pressed="${active}">
+      ${iconFor(dom)}
+      <span class="tile-txt">
+        <span class="tile-name">${dom}</span>
+        <span class="tile-count">${n === 0 ? "אין מכרזים" : n === 1 ? "מכרז אחד" : n + " מכרזים"}</span>
+      </span>
+    </button>`;
+  }).join("");
+  tilesEl.querySelectorAll(".tile").forEach(b=>b.addEventListener("click",()=>{
+    if (b.disabled) return;
+    selDomain = (selDomain === b.dataset.dom) ? "" : b.dataset.dom;
+    apply(true);
+  }));
+}
+
+function render(){
+  const rows = subset({domain:selDomain, status:selStatus}).sort((a,b)=>{
+    const order = {open:0, soon:0, valid:1, archived:2};
+    const oa = order[statusOf(a)], ob = order[statusOf(b)];
+    return oa !== ob ? oa-ob : d(b.published)-d(a.published);
+  });
+  countEl.textContent = rows.length
+    ? `מוצגים ${rows.length} מכרזים${rows.length < TENDERS.length ? ` מתוך ${TENDERS.length}` : ""}`
+    : "";
+  let emptyMsg;
+  if (selScope === "אשכול" && !selDomain && !selStatus && !query)
+    emptyMsg = `מכרזי האשכול (לצרכים הפנימיים של האשכול) יתווספו כאן.<br>המכרזים המשותפים לרשויות נמצאים בלשונית הסמוכה.`;
+  else
+    emptyMsg = `לא נמצאו מכרזים שמתאימים לסינון.<br>אפשר לנקות את הסינון או לפנות ל${CONTACT.name} בטלפון ${CONTACT.phone}.`;
+  grid.innerHTML = rows.length ? rows.map(cardHTML).join("")
+    : `<div class="empty">${emptyMsg}</div>`;
+  grid.querySelectorAll(".card").forEach(c=>c.addEventListener("click",()=>openDetail(c.dataset.num)));
+}
+
+// שורת נתונים בראש הדף — סקירה מהירה שממלאת את החלק העליון במידע אמיתי
+function renderStats(){
+  const inScope = TENDERS.filter(t => (t.scope || "משותף") === selScope);
+  const domains = new Set(inScope.map(t => t.domain)).size;
+  const suppliers = inScope.reduce((s,t) => s + (t.winners ? t.winners.length : 0), 0);
+  const stats = [
+    [inScope.length, "מכרזים והסכמים"],
+    [suppliers, "ספקים בהסכמים"],
+    [domains, "תחומים"],
+    [15, "רשויות באשכול"],
+  ];
+  document.getElementById("stats").innerHTML = stats
+    .map(([n,l]) => `<div class="stat"><span class="n">${n}</span><span class="l">${l}</span></div>`).join("");
+}
+
+function apply(scrollToResults){
+  // אם הסטטוס/החיפוש ביטלו את הקטגוריה שנבחרה — מאפסים אותה
+  if (selDomain && subset({domain:selDomain, status:selStatus}).length === 0) selDomain = "";
+  renderStats();
+  renderTiles();
+  render();
+  clearBtn.classList.toggle("hidden", !(selDomain||selStatus||query));
+  if (scrollToResults){
+    const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    resultsAnchor.scrollIntoView({behavior: reduce ? "auto" : "smooth", block:"start"});
+  }
+}
+
+// לשוניות ההפרדה — מעבר בין מכרזים משותפים למכרזי האשכול מאפס את שאר הסינונים
+document.querySelectorAll(".scope-tab").forEach(tab=>tab.addEventListener("click", ()=>{
+  if (tab.dataset.scope === selScope) return;
+  selScope = tab.dataset.scope;
+  selDomain = selStatus = query = "";
+  qEl.value = ""; stEl.value = "";
+  document.querySelectorAll(".scope-tab").forEach(t=>{
+    const on = t.dataset.scope === selScope;
+    t.classList.toggle("is-on", on);
+    t.setAttribute("aria-selected", on ? "true" : "false");
+  });
+  apply(false);
+}));
+
+qEl.addEventListener("input", ()=>{ query = qEl.value.trim(); apply(false); });
+stEl.addEventListener("change", ()=>{ selStatus = stEl.value; apply(false); });
+clearBtn.addEventListener("click", ()=>{
+  selDomain = selStatus = query = "";
+  qEl.value = ""; stEl.value = "";
+  apply(true);
+});
+
+// ---------- detail ----------
+const viewList = document.getElementById("view-list");
+const viewDetail = document.getElementById("view-detail");
+
+function clocksHTML(t){
+  const st = statusOf(t), dl = days(t.deadline);
+  const supplier = st==="open"||st==="soon"
+    ? `<div class="clock supplier">
+         <div class="who">▸ למציעים / ספקים</div>
+         <div class="lbl">מועד אחרון להגשה</div>
+         <div class="val">${fmt(t.deadline)} · ${t.deadlineTime}</div>
+         <div class="note" style="color:${dl<=14?'#8A5200':'#1B6E3C'}">${dl===0?"היום!":"נותרו "+dl+" ימים"}</div>
+       </div>`
+    : `<div class="clock supplier expired">
+         <div class="who">▸ למציעים / ספקים</div>
+         <div class="lbl">מועד אחרון להגשה</div>
+         <div class="val">${t.deadline ? fmt(t.deadline) : "הסתיימה"}</div>
+         <div class="note" style="color:#5B6470">ההגשה נסגרה</div>
+       </div>`;
+
+  let muni;
+  if (t.validUntil){
+    const vu = days(t.validUntil);
+    muni = vu>=0
+      ? `<div class="clock muni">
+           <div class="who">▸ לרשויות האשכול</div>
+           <div class="lbl">ההסכם בתוקף עד</div>
+           <div class="val">${fmt(t.validUntil)}</div>
+           <div class="note" style="color:#1B6E3C">אפשר להצטרף להסכם</div>
+         </div>`
+      : `<div class="clock muni expired">
+           <div class="who">▸ לרשויות האשכול</div>
+           <div class="lbl">ההסכם היה בתוקף עד</div>
+           <div class="val">${fmt(t.validUntil)}</div>
+           <div class="note" style="color:#5B6470">ההסכם הסתיים</div>
+         </div>`;
+  } else if (st === "valid"){
+    // הסכם מסגרת פעיל שתאריך התוקף שלו טרם הוזן
+    muni = `<div class="clock muni">
+              <div class="who">▸ לרשויות האשכול</div>
+              <div class="lbl">הסכם המסגרת</div>
+              <div class="val">בתוקף</div>
+              <div class="note" style="color:#1B6E3C">אפשר להצטרף להסכם</div>
+            </div>`;
+  } else {
+    muni = `<div class="clock muni">
+              <div class="who">▸ לרשויות האשכול</div>
+              <div class="lbl">תוקף ההסכם</div>
+              <div class="val" style="font-size:19px;color:#5B6470">ייקבע עם חתימת ההסכם</div>
+            </div>`;
+  }
+  return `<div class="clocks">${supplier}${muni}</div>`;
+}
+
+// תיבת יצירת הקשר משתנה לפי מצב המכרז — כי הקהל הרלוונטי משתנה:
+// מכרז פתוח פונה לספקים ("לפני הגשה"), מכרז שנסגר וההסכם בתוקף פונה לרשויות ("להצטרף").
+function coordHTML(t){
+  const st = statusOf(t);
+  const lines = `
+    <div class="coord-lines">
+      <span>👤 ${CONTACT.name}, מנהלת הרכש</span>
+      <a href="tel:${CONTACT.tel}">📞 ${CONTACT.phone}</a>
+      <a href="mailto:${CONTACT.mail}">✉️ שליחת מייל</a>
+    </div>`;
+
+  if (st === "open" || st === "soon"){
+    return `<div class="coord">
+      <h2>לפני הגשה — חובה לתאם מראש</h2>
+      <p>רכישת מסמכי המכרז המלאים ותיאום ההגשה נעשים מול מנהלת הרכש של האשכול. ההגשה אינה מתבצעת דרך האתר.</p>
+      ${lines}</div>`;
+  }
+  if (st === "valid"){
+    const until = t.validUntil ? ` עד ${fmt(t.validUntil)}` : "";
+    return `<div class="coord">
+      <h2>ההגשה נסגרה — אבל אפשר להצטרף להסכם</h2>
+      <p>רשות שמעוניינת לרכוש דרך הסכם המסגרת הזה יכולה להצטרף${until}. לפרטים ולתהליך ההצטרפות — פנו למנהלת הרכש.</p>
+      ${lines}</div>`;
+  }
+  return `<div class="coord coord-muted">
+    <h2>המכרז בארכיון</h2>
+    <p>ההסכם הסתיים ולא ניתן להצטרף אליו. המכרז מוצג לצורכי תיעוד בלבד. לשאלות על מכרז חלופי בתחום — פנו למנהלת הרכש.</p>
+    ${lines}</div>`;
+}
+
+// רכישת מסמכי המכרז — פעולה של ספקים המגישים למכרז פתוח. מוצג רק כשהמכרז פתוח
+// להגשה (לא לרשויות שמצטרפות להסכם מסגרת). מבנה בלבד — הסליקה תחובר בהמשך
+// (באתר האשכול הנוכחי התשלום עובר דרך ספק חיצוני).
+function buyBlock(t){
+  // שלב 1 (דף נחיתה): הרכישה המקוונת למציעים אינה מוצגת — היא עוברת לשלב 2,
+  // בתוך אתר האשכול המשופץ (WordPress), שם יחובר שער התשלום. להחזרה: מחקי שורה זו.
+  return "";
+  const st = statusOf(t);
+  if (!t.cost || !(st === "open" || st === "soon")) return "";
+  return `<section class="block buy-block">
+    <div>
+      <div class="who" style="color:var(--burgundy);font-size:13px;font-weight:700;margin-bottom:3px">▸ למציעים / ספקים</div>
+      <h2>רכישת מסמכי המכרז</h2>
+      <p class="sub">מסמכי המכרז המלאים זמינים לרכישה מקוונת לצורך הגשת הצעה.</p>
+    </div>
+    <div class="buy-action">
+      <span class="buy-price">₪${t.cost.toLocaleString("he-IL")}</span>
+      <button type="button" class="buy-btn" id="buyBtn">🛒 הוספה לסל</button>
+    </div>
+    <div class="buy-note hidden" id="buyNote">
+      התשלום המקוון יופעל עם עליית האתר לאוויר. בשלב האב-טיפוס זו הדגמת מבנה בלבד —
+      לרכישת מסמכי המכרז כעת פנו ל${CONTACT.name}, מנהלת הרכש, בטלפון ${CONTACT.phone}.
+    </div>
+  </section>`;
+}
+
+function detailHTML(t){
+  const st = statusOf(t), m = STATUS_META[st];
+  const fact = (k,v)=> v ? `<div><dt>${k}</dt><dd>${v}</dd></div>` : "";
+  return `
+  <button class="back" id="backBtn">→ חזרה לרשימת המכרזים</button>
+
+  <div class="disclaimer">
+    <strong>הבהרה משפטית:</strong> המידע בעמוד זה הוא תמצית לנוחות בלבד. הנוסח המחייב הוא מסמכי המכרז הרשמיים בלבד. בכל סתירה — מסמכי המכרז גוברים.
+  </div>
+
+  <div class="detail-head">
+    <div class="card-top">
+      <span class="num">מכרז ${t.num}</span>
+      <span class="badge ${m.cls}">${m.txt}</span>
+      ${isUpdatedRecently(t) ? '<span class="badge new">עודכן לאחרונה</span>' : ''}
+    </div>
+    <div class="detail-title-row">
+      ${iconFor(t.domain)}
+      <div>
+        <h1>${shortName(t)}</h1>
+        <p style="color:var(--muted);margin:0;max-width:70ch">${t.desc}</p>
+      </div>
+    </div>
+    <p style="font-size:14px;color:var(--muted);margin:0">
+      <strong style="color:var(--ink);font-weight:600">השם המלא של המכרז:</strong> ${t.name}
+    </p>
+  </div>
+
+  ${clocksHTML(t)}
+
+  ${coordHTML(t)}
+  ${buyBlock(t)}
+
+  <section class="block">
+    <h2>פרטי המכרז</h2>
+    <dl class="facts">
+      ${fact("תחום", t.domain)}
+      ${fact("סוג מכרז", t.type)}
+      ${fact("גוף מפרסם", t.body)}
+      ${fact("שותפים", t.partners)}
+      ${fact("רשויות רלוונטיות", t.relevant)}
+      ${fact("תאריך פרסום", fmt(t.published))}
+      ${fact("מועד אחרון לשאלות הבהרה", fmt(t.questions))}
+      ${t.tour ? fact("סיור מציעים", fmt(t.tour) + (t.tourReq==="כן" ? " (חובה)" : " (רשות)")) : ""}
+      ${fact("עלות רכישת מסמכים", t.cost ? t.cost.toLocaleString("he-IL")+" ₪" : "ללא עלות")}
+      ${fact("ערבות מכרז", t.guarantee ? t.guarantee.toLocaleString("he-IL")+" ₪" : "")}
+      ${fact("אומדן / היקף כספי", t.estimate)}
+      ${t.winners && t.winners.length ? fact("ספקים זוכים", t.winners.join(" · ")) : ""}
+    </dl>
+    ${t.notes ? `<p style="margin:16px 0 0;padding:11px 14px;background:#F7F8FA;border-radius:8px"><strong>הערה:</strong> ${t.notes}</p>` : ""}
+  </section>
+
+  ${t.terms && t.terms.length ? `
+  <section class="block">
+    <h2>תנאי סף עיקריים</h2>
+    <ul class="terms">${t.terms.map(x=>`<li>${x}</li>`).join("")}</ul>
+    <p style="font-size:14px;color:var(--muted);margin:12px 0 0">זו תמצית בלבד. רשימת תנאי הסף המלאה מופיעה במסמכי המכרז.</p>
+  </section>` : ""}
+
+  <section class="block">
+    <h2>מסמכים להורדה</h2>
+    ${t.files.length ? `<ul class="files">${t.files.map(f=>`
+      <li><a href="#" onclick="return false"><span class="ic">📄</span>${f.n}<span class="sz">${f.s}</span></a></li>`).join("")}</ul>
+      <p style="font-size:14px;color:var(--muted);margin:14px 0 0">אלה המסמכים שאושרו לפרסום. מסמכי המכרז המלאים נרכשים מול מנהלת הרכש.</p>`
+      : `<p style="color:var(--muted);margin:0">לא פורסמו מסמכים למכרז זה.</p>`}
+  </section>
+
+  <section class="block">
+    <h2>עדכונים והבהרות</h2>
+    ${t.updates.length ? `<ul class="updates">${t.updates.map(u=>`
+      <li><span class="date">${fmt(u.d)}</span><span>${u.t}</span></li>`).join("")}</ul>`
+      : `<p style="color:var(--muted);margin:0">לא פורסמו עדכונים או הבהרות למכרז זה.</p>`}
+  </section>
+
+  <div style="height:30px"></div>`;
+}
+
+function openDetail(num){
+  const t = TENDERS.find(x=>x.num===num);
+  viewDetail.innerHTML = detailHTML(t);
+  viewList.classList.add("hidden");
+  viewDetail.classList.remove("hidden");
+  window.scrollTo(0,0);
+  document.getElementById("backBtn").addEventListener("click",()=>{
+    viewDetail.classList.add("hidden");
+    viewList.classList.remove("hidden");
+    window.scrollTo(0,0);
+    qEl.focus({preventScroll:true});
+  });
+  const buyBtn = document.getElementById("buyBtn");
+  if (buyBtn) buyBtn.addEventListener("click", ()=>{
+    document.getElementById("buyNote").classList.remove("hidden");
+    buyBtn.disabled = true;
+    buyBtn.style.opacity = ".6";
+  });
+  document.getElementById("backBtn").focus();
+}
+
+apply(false);
+
+// באנר "גרסת תצוגה מקדימה" — ניתן לסגירה, וזוכר לכל צופה שסגר (localStorage)
+(function(){
+  const bar = document.getElementById("previewBar");
+  const x = document.getElementById("previewX");
+  if (!bar) return;
+  try { if (localStorage.getItem("previewDismissed") === "1") bar.hidden = true; } catch(e){}
+  if (x) x.addEventListener("click", ()=>{
+    bar.hidden = true;
+    try { localStorage.setItem("previewDismissed", "1"); } catch(e){}
+  });
+})();
+</script>
+</body>
+</html>
