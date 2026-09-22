@@ -445,18 +445,19 @@ function iconFor(domain){
 // כרגע ריק — עדי תספק תמונות אמיתיות, אחת לכל קטגוריה. עד אז מוצג כיסוי מותג
 // עם אייקון הקטגוריה. כדי להוסיף תמונה: IMAGES["אנרגיה"] = "data:image/jpeg;base64,…".
 const IMAGES = {};
-// תמונות-מקום זמניות לפי נושא התחום (loremflickr). עדי תחליף בתמונות אמיתיות דרך IMAGES.
+// תמונות-מקום זמניות לפי נושא התחום (Unsplash CDN אמין). עדי תחליף בתמונות אמיתיות דרך IMAGES.
+const U = id => "https://images.unsplash.com/photo-" + id + "?w=600&h=400&fit=crop&q=70";
 const CAT_IMG = {
-  "שירותים חברתיים":"people?lock=11",
-  "איכות הסביבה":"recycling?lock=11",
-  "דיגיטציה ומחשוב":"technology?lock=11",
-  "GIS ונתונים":"satellite?lock=11",
-  "אנרגיה":"solar?lock=11",
-  "ייעוץ":"meeting?lock=11",
-  "חירום":"security?lock=11",
-  "תכנון, תשתיות ובינוי":"building?lock=11",
-  "רכש וטובין":"warehouse?lock=11",
-  "אחר":"desert,israel?lock=2"
+  "שירותים חברתיים":      U("1529156069898-49953e39b3ac"),
+  "איכות הסביבה":         U("1532996122724-e3c354a0b15b"),
+  "דיגיטציה ומחשוב":      U("1518770660439-4636190af475"),
+  "GIS ונתונים":          U("1524661135-423995f22d0b"),
+  "אנרגיה":               U("1509391366360-2e959784a276"),
+  "ייעוץ":                U("1522071820081-009f0129c71c"),
+  "חירום":                U("1557324232-b8917d3c3dcb"),
+  "תכנון, תשתיות ובינוי": U("1503387762-592deb58ef4e"),
+  "רכש וטובין":           U("1553413077-190dd305871c"),
+  "אחר":                  U("1509316785289-025f5b846b35")
 };
 function mediaFor(t){
   const scopeTag = t.scope === "אשכול" ? "מכרז האשכול" : "משותף לרשויות";
@@ -546,7 +547,7 @@ function pcardHTML(t){
   else if (st === "valid") meta = (t.winners && t.winners.length) ? t.winners.length + " ספקים בהסכם" : "בהליך בחירה";
   else meta = "בארכיון";
   // תמונת-מקום זמנית (picsum) לפי מספר המכרז — עדי תחליף בתמונות אמיתיות (map: IMAGES)
-  const img = IMAGES[t.domain] || ("https://loremflickr.com/600/380/" + (CAT_IMG[t.domain] || CAT_IMG["אחר"]));
+  const img = IMAGES[t.domain] || CAT_IMG[t.domain] || CAT_IMG["אחר"];
   return `
     <button class="pcard is-${st}" data-num="${t.num}">
       <div class="pcard-media">
