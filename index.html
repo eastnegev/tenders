@@ -236,6 +236,8 @@
   dl.facts dd{margin:0;font-weight:700}
   ul.terms{margin:0;padding-inline-start:20px}
   ul.terms li{margin-bottom:6px}
+  ul.winners{margin:6px 0 0;padding-inline-start:20px;list-style:disc}
+  ul.winners li{margin-bottom:5px;font-weight:600}
 
   .files{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px}
   .files a{
@@ -840,7 +842,7 @@ function detailHTML(t){
       ${fact("עלות רכישת מסמכים", t.cost ? t.cost.toLocaleString("he-IL")+" ₪" : "ללא עלות")}
       ${fact("ערבות מכרז", t.guarantee ? t.guarantee.toLocaleString("he-IL")+" ₪" : "")}
       ${fact("אומדן / היקף כספי", t.estimate)}
-      ${t.winners && t.winners.length ? fact("ספקים זוכים", t.winners.join(" · ")) : ""}
+      ${t.winners && t.winners.length ? `<div style="grid-column:1/-1"><dt>ספקים זוכים</dt><dd><ul class="winners">${t.winners.map(w=>`<li>${w}</li>`).join("")}</ul></dd></div>` : ""}
     </dl>
     ${t.notes ? `<p style="margin:16px 0 0;padding:11px 14px;background:#F7F8FA;border-radius:8px"><strong>הערה:</strong> ${t.notes}</p>` : ""}
   </section>
