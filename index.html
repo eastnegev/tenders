@@ -1512,13 +1512,13 @@ function detailHTML(t){
     <p style="font-size:14px;color:var(--muted);margin:12px 0 0">זו תמצית בלבד. רשימת תנאי הסף המלאה מופיעה במסמכי המכרז.</p>
   </section>` : ""}
 
+  ${t.files.length ? `
   <section class="block">
     <h2>מסמכים להורדה</h2>
-    ${t.files.length ? `<ul class="files">${t.files.map(f=>`
+    <ul class="files">${t.files.map(f=>`
       <li><a href="#" onclick="return false"><span class="ic">📄</span>${f.n}<span class="sz">${f.s}</span></a></li>`).join("")}</ul>
-      <p style="font-size:14px;color:var(--muted);margin:14px 0 0">אלה המסמכים שאושרו לפרסום. מסמכי המכרז המלאים נרכשים מול מנהלת הרכש.</p>`
-      : `<p style="color:var(--muted);margin:0">לא פורסמו מסמכים למכרז זה.</p>`}
-  </section>
+    <p style="font-size:14px;color:var(--muted);margin:14px 0 0">אלה המסמכים שאושרו לפרסום. מסמכי המכרז המלאים נרכשים מול מנהלת הרכש.</p>
+  </section>` : ""}
 
   <section class="block">
     <h2>עדכונים והבהרות</h2>
