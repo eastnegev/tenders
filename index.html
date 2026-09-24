@@ -1469,11 +1469,6 @@ function detailHTML(t){
     </p>
   </div>
 
-  ${clocksHTML(t)}
-
-  ${coordHTML(t)}
-  ${buyBlock(t)}
-
   <section class="block">
     <h2>פרטי המכרז</h2>
     <dl class="facts">
@@ -1492,6 +1487,9 @@ function detailHTML(t){
     </dl>
     ${t.notes ? `<p style="margin:16px 0 0;padding:11px 14px;background:#F7F8FA;border-radius:8px"><strong>הערה:</strong> ${t.notes}</p>` : ""}
   </section>
+
+  ${coordHTML(t)}
+  ${buyBlock(t)}
 
   ${t.terms && t.terms.length ? `
   <section class="block">
